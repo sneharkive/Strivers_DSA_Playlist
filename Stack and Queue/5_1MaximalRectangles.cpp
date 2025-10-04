@@ -1,13 +1,14 @@
-// 84. Largest Rectangle in Histogram
+/*
+85. Maximal Rectangle
 
-// Given an array of integers heights representing the histogram's bar height where the width of each bar is 1, return the area of the largest rectangle in the histogram.
-
+Given a rows x cols binary matrix filled with 0's and 1's, find the largest rectangle containing only 1's and return its area.
+*/
 
 #include <bits/stdc++.h>
 using namespace std;
 
 class Solution {
-  public:
+  private:
     int largestRectangleArea(vector < int > & heights) {
       int n = heights.size();
       stack < int > st;
@@ -44,10 +45,31 @@ class Solution {
       
       return maxA;
     }
+ 
+    public:
+    int maximalRectangle(vector<vector<int>>& matrix) {
+      int n = matrix.size();
+      int m = matrix[0].size();
+
+      vector<vector<int>> prefixSum(n, vector<int>(m));
+
+      for(int j = 0; j < m; j++){
+        int sum = 0;
+        for(int i = 0; i < n; i++) {
+          sum += matrix[i][j];
+          if(matrix[i][j] == 0) sum = 0;    
+          prefixSum[i][j] = sum;
+        }
+      }
+      
+      int maxArea = 0;
+
+      for(int i = 0; i < n; i++){
+        int area = largestRectangleArea(prefixSum[i]);
+
+        maxArea = max(maxArea, area);
+      }
+
+      return maxArea;
+    }
 };
-int main() {
-  vector<int> heights = {2, 1, 5, 6, 2, 3, 1};
-  Solution obj;
-  cout << "The largest area in the histogram is " << obj.largestRectangleArea(heights); 
-  return 0;
-}
